@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+    environment {
+        GCP_PROJECT_ID = 'single-system-dev'
+        SERVICE_ACCOUNT = credentials("jenkins_gcp_service_account")
+        GCP_CLUSTER = credentials("gcp_cluster")
+        GCP_ZONE = 'europe-central2-c'
+    }
+    stages {
+        stage('install') {
+            steps {
+                script {
+                    withCredentials([file(credentialsId: 'jenkins-service-account-key-file', variable: 'GC_KEY')]) {
+                        sh "gcloud auth activate-service-account ${env.SERVICE_ACCOUNT}" +
+                                " --key-file=${GC_KEY} --project ${env.GCP_PROJECT_ID}"
+                        sh "gcloud container clusters get-credentials ${env.GCP_CLUSTER} --zone ${GCP_ZONE} " +
+                                "--project ${env.GCP_PROJECT_ID}"
+                        sh "kubectl apply -f gold-ssd.yml"
+                        sh "kubectl apply -f statefulset.yml"
+                        sh "kubectl apply -f service.yml"
+                    }
+                }
+            }
+        }
+    }
+}
