@@ -15,6 +15,8 @@ pipeline {
                                 " --key-file=${GC_KEY} --project ${env.GCP_PROJECT_ID}"
                         sh "gcloud container clusters get-credentials ${env.GCP_CLUSTER} --zone ${GCP_ZONE} " +
                                 "--project ${env.GCP_PROJECT_ID}"
+                        def current_dir = sh script: 'ls', returnStdout: true
+                        echo "${current_dir}"
                         sh "kubectl apply -f mongo\\gold-ssd.yml"
                         sh "kubectl apply -f mongo\\statefulset.yml"
                         sh "kubectl apply -f mongo\\service.yml"
