@@ -15,9 +15,9 @@ pipeline {
                                 " --key-file=${GC_KEY} --project ${env.GCP_PROJECT_ID}"
                         sh "gcloud container clusters get-credentials ${env.GCP_CLUSTER} --zone ${GCP_ZONE} " +
                                 "--project ${env.GCP_PROJECT_ID}"
-                        sh "kubectl apply -f gold-ssd.yml"
-                        sh "kubectl apply -f statefulset.yml"
-                        sh "kubectl apply -f service.yml"
+                        sh "kubectl apply -f mongo\\gold-ssd.yml"
+                        sh "kubectl apply -f mongo\\statefulset.yml"
+                        sh "kubectl apply -f mongo\\service.yml"
                     }
                 }
             }
