@@ -14,7 +14,6 @@ pipeline {
                         sh "gcloud auth activate-service-account ${env.SERVICE_ACCOUNT}" +
                                 " --key-file=${GC_KEY} --project ${env.GCP_PROJECT_ID}"
                         sh "gcloud container clusters get-credentials ${env.GCP_CLUSTER} --zone ${GCP_ZONE} --project ${env.GCP_PROJECT_ID}"
-                        sh "kind create cluster"
                         sh "kubectl create namespace kafka"
                         sh "kubectl create -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka"
                         sh "kubectl apply -f https://strimzi.io/examples/latest/kafka/kafka-persistent-single.yaml -n kafka"
