@@ -23,7 +23,6 @@ spec:
             - mongod
             - "--replSet"
             - rs0
-            - "--smallfiles"
             - "--noprealloc"
           ports:
             - containerPort: 27017
@@ -38,4 +37,4 @@ spec:
         accessModes: ["ReadWriteOnce"]
         resources:
           requests:
-            storage: 4Gi
+            storage: 16Gi
