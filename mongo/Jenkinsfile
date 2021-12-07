@@ -23,4 +23,17 @@ pipeline {
             }
         }
     }
+    post {
+        failure {
+            withCredentials([file(credentialsId: 'jenkins-service-account-key-file', variable: 'GC_KEY')]) {
+                sh "gcloud auth activate-service-account ${env.SERVICE_ACCOUNT}" +
+                        " --key-file=${GC_KEY} --project ${env.GCP_PROJECT_ID}"
+                sh "gcloud container clusters get-credentials ${env.GCP_CLUSTER} --zone ${GCP_ZONE} " +
+                        "--project ${env.GCP_PROJECT_ID}"
+                sh "kubectl delete statefulset mongo"
+                sh "kubectl delete svc mongo"
+            }
+        }
+    }
+
 }
